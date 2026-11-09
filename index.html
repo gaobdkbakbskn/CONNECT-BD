@@ -1,1 +1,208 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d18">
+<title>CONNECT BD | Social Network</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080d18;color:#f1f5ff;font-family:Arial,sans-serif;padding-bottom:80px}
+header{height:65px;background:#101a2b;border-bottom:1px solid #26344a;display:flex;align-items:center;justify-content:space-between;padding:0 17px;position:sticky;top:0;z-index:10}
+.logo{font-size:23px;font-weight:900;color:#28d6a2}
+.logo span{color:white}
+button{cursor:pointer;border:0}
+.lang{background:#25354c;color:white;border-radius:20px;padding:9px 12px}
+.container{max-width:600px;margin:auto;padding:15px}
+.welcome{padding:18px 3px}
+.welcome h2{font-size:23px;margin-bottom:8px}
+.muted{color:#94a4ba;font-size:13px}
+.card{background:#111c2d;border:1px solid #293950;border-radius:16px;padding:16px;margin-bottom:15px}
+.row{display:flex;align-items:center;gap:12px}
+.avatar{height:43px;width:43px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#27dca7,#3676ee);display:grid;place-items:center;font-weight:bold;color:white}
+textarea,input{background:#091321;color:white;border:1px solid #35465e;border-radius:11px;padding:13px;width:100%;font-size:15px;outline:none}
+textarea{resize:vertical;min-height:85px;margin:15px 0}
+.primary{background:#24d5a1;color:#06150f;font-weight:bold;padding:12px 19px;border-radius:10px}
+.section-title{margin:20px 2px 13px}
+.post-text{line-height:1.6;margin:17px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.actions{display:flex;justify-content:space-around;border-top:1px solid #293950;padding-top:12px;margin-top:12px}
+.action{background:none;color:#aebdd0;padding:8px;font-size:14px}
+.liked{color:#ff5b82}
+.bottom{position:fixed;bottom:0;left:0;right:0;height:68px;background:#111b2b;border-top:1px solid #293950;display:flex;justify-content:space-around;align-items:center;z-index:20}
+.bottom button{background:none;color:#92a4bb;font-size:12px;display:grid;gap:5px;justify-items:center}
+.bottom button b{font-size:21px}
+.bottom button.active{color:#27d6a2}
+.hidden{display:none!important}
+.comment{margin-top:9px;font-size:13px;color:#d2dbea;background:#1b2a40;padding:9px;border-radius:9px}
+.comment-input{display:flex;gap:8px;margin-top:12px}
+.comment-input input{min-width:0}
+.profile{text-align:center;padding:25px}
+.profile .avatar{width:85px;height:85px;margin:auto;font-size:28px}
+.profile h2{margin:12px}
+.stats{display:flex;justify-content:space-around;margin-top:23px}
+.stats strong{display:block;color:#29d7a3;font-size:21px}
+.empty{text-align:center;padding:35px 15px;color:#9eacc0}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">CONNECT <span>BD.</span></div>
+ <button class="lang" onclick="toggleLanguage()">বাংলা / EN</button>
+</header>
+
+<main class="container">
+
+<section id="home">
+ <div class="welcome">
+  <h2 id="welcome">CONNECT BD-তে স্বাগতম 👋</h2>
+  <p class="muted" id="welcomeSub">বন্ধুদের সাথে যুক্ত হও, নিজের মুহূর্ত শেয়ার করো।</p>
+ </div>
+
+ <div class="card">
+  <div class="row">
+   <div class="avatar">U</div>
+   <strong id="createTitle">নতুন পোস্ট তৈরি করো</strong>
+  </div>
+  <textarea id="postInput" placeholder="তোমার মনে কী চলছে?"></textarea>
+  <button class="primary" onclick="createPost()" id="publish">＋ পোস্ট প্রকাশ করো</button>
+ </div>
+
+ <h3 class="section-title" id="feedTitle">সর্বশেষ পোস্ট</h3>
+ <div id="feed"></div>
+</section>
+
+<section id="profile" class="hidden">
+ <div class="card profile">
+  <div class="avatar">U</div>
+  <h2>CONNECT BD User</h2>
+  <p class="muted">@connectbd_user</p>
+  <p class="muted">Welcome to my profile!</p>
+  <div class="stats">
+   <div><strong id="postCount">0</strong>Posts</div>
+   <div><strong>0</strong>Friends</div>
+   <div><strong>0</strong>Followers</div>
+  </div>
+ </div>
+</section>
+
+<section id="notifications" class="hidden">
+ <div class="card empty">
+  <h1>🔔</h1><h3>Notifications</h3>
+  <p class="muted">এখনো কোনো নোটিফিকেশন নেই।</p>
+ </div>
+</section>
+
+<section id="messages" class="hidden">
+ <div class="card">
+  <h2>💬 CONNECT BD Messenger</h2>
+  <p class="muted" style="margin:12px 0">Messenger Demo</p>
+  <p>আসল অনলাইন চ্যাট পরবর্তী ভার্সনে যুক্ত হবে।</p>
+ </div>
+</section>
+
+</main>
+
+<nav class="bottom">
+ <button class="active" onclick="showPage('home',this)"><b>⌂</b><span id="nHome">হোম</span></button>
+ <button onclick="showPage('messages',this)"><b>✉</b><span id="nChat">চ্যাট</span></button>
+ <button onclick="showPage('notifications',this)"><b>♧</b><span id="nAlert">নোটিফিকেশন</span></button>
+ <button onclick="showPage('profile',this)"><b>♙</b><span id="nProfile">প্রোফাইল</span></button>
+</nav>
+
+<script>
+let posts=[];
+let bengali=true;
+
+function toggleLanguage(){
+ bengali=!bengali;
+ document.getElementById('welcome').textContent=bengali?'CONNECT BD-তে স্বাগতম 👋':'Welcome to CONNECT BD 👋';
+ document.getElementById('welcomeSub').textContent=bengali?'বন্ধুদের সাথে যুক্ত হও, নিজের মুহূর্ত শেয়ার করো।':'Connect with friends. Share your world.';
+ document.getElementById('createTitle').textContent=bengali?'নতুন পোস্ট তৈরি করো':'Create a post';
+ document.getElementById('postInput').placeholder=bengali?'তোমার মনে কী চলছে?':'What is on your mind?';
+ document.getElementById('publish').textContent=bengali?'＋ পোস্ট প্রকাশ করো':'＋ Publish Post';
+ document.getElementById('feedTitle').textContent=bengali?'সর্বশেষ পোস্ট':'Latest Posts';
+ document.getElementById('nHome').textContent=bengali?'হোম':'Home';
+ document.getElementById('nChat').textContent=bengali?'চ্যাট':'Chat';
+ document.getElementById('nAlert').textContent=bengali?'নোটিফিকেশন':'Alerts';
+ document.getElementById('nProfile').textContent=bengali?'প্রোফাইল':'Profile';
+}
+
+function escapeHTML(s){
+ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function createPost(){
+ let input=document.getElementById('postInput');
+ let text=input.value.trim();
+ if(!text){alert('আগে কিছু লিখুন!');return}
+ posts.unshift({id:Date.now(),text,likes:0,liked:false,comments:[]});
+ input.value='';
+ render();
+}
+
+function like(id){
+ let p=posts.find(x=>x.id===id);
+ if(!p)return;
+ p.liked=!p.liked;
+ p.likes+=p.liked?1:-1;
+ render();
+}
+
+function comment(id){
+ let input=document.getElementById('comment'+id);
+ let value=input.value.trim();
+ if(!value)return;
+ posts.find(x=>x.id===id).comments.push(value);
+ render();
+}
+
+function share(id){
+ let p=posts.find(x=>x.id===id);
+ if(navigator.share){
+  navigator.share({title:'CONNECT BD',text:p.text}).catch(()=>{});
+ }else if(navigator.clipboard){
+  navigator.clipboard.writeText(p.text).then(()=>alert('Copied!')).catch(()=>alert(p.text));
+ }else{alert(p.text)}
+}
+
+function render(){
+ let feed=document.getElementById('feed');
+ document.getElementById('postCount').textContent=posts.length;
+ if(!posts.length){
+  feed.innerHTML='<div class="card empty">🌍<h3>Welcome!</h3><p class="muted">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি তুমি করো!</p></div>';
+  return;
+ }
+ feed.innerHTML=posts.map(p=>`
+ <article class="card">
+  <div class="row">
+   <div class="avatar">U</div>
+   <div><strong>CONNECT BD User</strong><p class="muted">Just now · 🌍 Public</p></div>
+  </div>
+  <div class="post-text">${escapeHTML(p.text)}</div>
+  <p class="muted">${p.likes} Likes · ${p.comments.length} Comments</p>
+  <div class="actions">
+   <button class="action ${p.liked?'liked':''}" onclick="like(${p.id})">${p.liked?'♥':'♡'} Like</button>
+   <button class="action" onclick="document.getElementById('comment${p.id}').focus()">💬 Comment</button>
+   <button class="action" onclick="share(${p.id})">↗ Share</button>
+  </div>
+  <div class="comment-input">
+   <input id="comment${p.id}" placeholder="Write a comment...">
+   <button class="primary" onclick="comment(${p.id})">Send</button>
+  </div>
+  ${p.comments.map(c=>'<div class="comment">💬 '+escapeHTML(c)+'</div>').join('')}
+ </article>`).join('');
+}
+
+function showPage(id,btn){
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+}
+
+render();
+</script>
+</body>
+</html>
